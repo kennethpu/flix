@@ -112,7 +112,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         }
         
         let url = NSURL(string: urlString)
-        cell.posterImageView.setImageWithURL(url!)
+        let request = NSURLRequest(URL: url!)
+        weak var weakIV = cell.posterImageView
+        cell.posterImageView.setImageWithURLRequest(request, placeholderImage: nil, success: { (request, response, image) -> Void in
+                weakIV!.alpha = 0.0
+                weakIV!.image = image
+                UIView.animateWithDuration(0.5) {
+                    weakIV!.alpha = 1.0
+                }
+            }, failure: nil)
         
         if (movieCriticsRating != nil) {
             cell.criticsIcon.image = MoviesUtils.getImageForRating(movieCriticsRating!)
