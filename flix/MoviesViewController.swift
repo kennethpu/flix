@@ -132,10 +132,12 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let request = NSURLRequest(URL: url!)
         weak var weakIV = cell.posterImageView
         cell.posterImageView.setImageWithURLRequest(request, placeholderImage: nil, success: { (request, response, image) -> Void in
-                weakIV!.alpha = 0.0
                 weakIV!.image = image
-                UIView.animateWithDuration(0.5) {
-                    weakIV!.alpha = 1.0
+                if (response.statusCode != 0) {
+                    weakIV!.alpha = 0.0
+                    UIView.animateWithDuration(0.5) {
+                        weakIV!.alpha = 1.0
+                    }
                 }
             }, failure: nil)
         
