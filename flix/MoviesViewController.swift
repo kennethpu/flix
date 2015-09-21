@@ -165,7 +165,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        NSLog(searchText)
         if(searchText == "") {
             self.isSearching = false
             self.tableView.reloadData()
