@@ -10,14 +10,18 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var errorView: UIView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var refreshControl: UIRefreshControl!
     var movies: [NSDictionary]?
+    var searchMovies: [NSDictionary]?
     var urlString: String!
+    
+    var isSearching: Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +40,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.tableView.addSubview(refreshControl)
         
+        self.isSearching = false
+        
         fetchData()
     }
     
@@ -43,7 +49,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let destinationVC = segue.destinationViewController as? MovieDetailsViewController
         let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
         
-        destinationVC!.movie = self.movies![indexPath!.row] as NSDictionary
+        if (self.isSearching!) {
+            destinationVC!.movie = self.searchMovies![indexPath!.row] as NSDictionary
+        } else {
+            destinationVC!.movie = self.movies![indexPath!.row] as NSDictionary
+        }
     }
     
     func refresh(sender: AnyObject) {
@@ -75,7 +85,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             } else if let error = error {
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
                 NSLog("\(error.description)")
-//                self.tableView.hidden = true
                 self.errorView.hidden = false
             }
         }
@@ -83,17 +92,25 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let movies = self.movies {
-            return movies.count
+        if (self.isSearching!) {
+            if let movies = self.searchMovies {
+                return movies.count
+            } else {
+                return 0
+            }
         } else {
-            return 0
+            if let movies = self.movies {
+                return movies.count
+            } else {
+                return 0
+            }
         }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("com.flix.movieCell", forIndexPath: indexPath) as! MoviesTableViewCell
         
-        let movie = self.movies![indexPath.row]
+        let movie = (self.isSearching!) ? self.searchMovies![indexPath.row] : self.movies![indexPath.row]
         let movieTitle = movie["title"] as? String
         let movieYear = movie["year"] as? Int
         let movieRating = movie["mpaa_rating"] as? String
@@ -141,5 +158,28 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 176
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.searchBar.resignFirstResponder()
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        NSLog(searchText)
+        if(searchText == "") {
+            self.isSearching = false
+            self.tableView.reloadData()
+            return
+        }
+        self.isSearching = true
+        self.searchMovies?.removeAll()
+        
+        let searchPredicate = NSPredicate(format: "title contains %@", searchText)
+        self.searchMovies = self.movies!.filter( { searchPredicate.evaluateWithObject($0) } )
+        self.tableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        self.searchBar.resignFirstResponder()
     }
 }
