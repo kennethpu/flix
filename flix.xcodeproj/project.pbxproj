@@ -15,6 +15,7 @@
 		BBCCF7E21BAE5ABA000E542C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBCCF7E01BAE5ABA000E542C /* Main.storyboard */; };
 		BBCCF7E41BAE5ABA000E542C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBCCF7E31BAE5ABA000E542C /* Assets.xcassets */; };
 		BBCCF7E71BAE5ABA000E542C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBCCF7E51BAE5ABA000E542C /* LaunchScreen.storyboard */; };
+		BBF655DE1BAFB38400BDE04E /* MoviesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF655DD1BAFB38400BDE04E /* MoviesUtils.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		BBCCF7E31BAE5ABA000E542C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBCCF7E61BAE5ABA000E542C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BBCCF7E81BAE5ABA000E542C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BBF655DD1BAFB38400BDE04E /* MoviesUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 				BBBFD0CA1BAEC4CD00CD45DB /* View Controllers */,
 				BBBFD0C91BAEB09500CD45DB /* Views */,
 				BBCCF7DC1BAE5ABA000E542C /* AppDelegate.swift */,
+				BBF655DD1BAFB38400BDE04E /* MoviesUtils.swift */,
 				BBCCF7E01BAE5ABA000E542C /* Main.storyboard */,
 				BBCCF7E31BAE5ABA000E542C /* Assets.xcassets */,
 				BBCCF7E51BAE5ABA000E542C /* LaunchScreen.storyboard */,
@@ -232,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBBFD0CC1BAEC4F100CD45DB /* MovieDetailsViewController.swift in Sources */,
+				BBF655DE1BAFB38400BDE04E /* MoviesUtils.swift in Sources */,
 				BB7CC1C01BAE9B2600C78CB3 /* MoviesTableViewCell.swift in Sources */,
 				BBCCF7DD1BAE5ABA000E542C /* AppDelegate.swift in Sources */,
 				BB7CC1BE1BAE5BD100C78CB3 /* MoviesViewController.swift in Sources */,

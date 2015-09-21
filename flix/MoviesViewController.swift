@@ -17,11 +17,17 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     var refreshControl: UIRefreshControl!
     var movies: [NSDictionary]?
+    var urlString: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = "Movies"
+        self.navigationItem.title = self.title
+        if (self.title == "Movies") {
+            self.urlString = "https://gist.githubusercontent.com/timothy1ee/d1778ca5b944ed974db0/raw/489d812c7ceeec0ac15ab77bf7c47849f2d1eb2b/gistfile1.json"
+        } else {
+            self.urlString = "https://gist.githubusercontent.com/timothy1ee/e41513a57049e21bc6cf/raw/b490e79be2d21818f28614ec933d5d8f467f0a66/gistfile1.json"
+        }
         
         self.errorView.hidden = true
         
@@ -49,7 +55,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     func fetchData() {
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         
-        let url = NSURL(string: "https://gist.githubusercontent.com/timothy1ee/d1778ca5b944ed974db0/raw/489d812c7ceeec0ac15ab77bf7c47849f2d1eb2b/gistfile1.json")
+        let url = NSURL(string: self.urlString)
         
         let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {
             (data, response, error) -> Void in
@@ -74,45 +80,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             }
         }
         task.resume()
-    }
-    
-    func getImageForRating(rating: NSString) -> UIImage? {
-        switch (rating) {
-            case "Certified Fresh":
-                return UIImage(named: "cert_fresh")
-            case "Fresh":
-                return UIImage(named: "fresh")
-            case "Rotten":
-                return UIImage(named: "rotten")
-            case "Upright":
-                return UIImage(named: "upright")
-            case "Spilled":
-                return UIImage(named: "spilled")
-            default:
-                return nil
-        }
-    }
-    
-    func getActorsString(cast: NSArray) -> NSString {
-        let firstThreeCast = cast.prefix(3)
-        var firstThreeActors = [String]()
-        for castMember in firstThreeCast {
-            let actor = castMember["name"] as? String
-            firstThreeActors.append(actor!)
-        }
-        return firstThreeActors.joinWithSeparator(", ")
-    }
-    
-    func minutesToRuntimeString(minutes: Int) -> NSString {
-        let numHours = minutes / 60
-        let numMinutes = minutes % 60
-        if (numHours == 0) {
-            return String(format: "%d min.", numMinutes)
-        } else if (numMinutes == 0) {
-            return String(format: "%d hr.", numHours)
-        } else {
-            return String(format: "%d hr. %d min.", numHours, numMinutes)
-        }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -148,18 +115,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.posterImageView.setImageWithURL(url!)
         
         if (movieCriticsRating != nil) {
-            cell.criticsIcon.image = getImageForRating(movieCriticsRating!)
+            cell.criticsIcon.image = MoviesUtils.getImageForRating(movieCriticsRating!)
         }
         cell.criticsScoreLabel.text = String(format: "%d%%", movieCriticsScore!)
         
         if (movieAudienceRating != nil) {
-            cell.audienceIcon.image = getImageForRating(movieAudienceRating!)
+            cell.audienceIcon.image = MoviesUtils.getImageForRating(movieAudienceRating!)
         }
         cell.audienceScoreLabel.text = String(format: "%d%%", movieAudienceScore!)
         
-        cell.actorsLabel.text = getActorsString(movieCast!) as String
+        cell.actorsLabel.text = MoviesUtils.getActorsString(movieCast!) as String
         
-        cell.ratingLabel.text = String(format: "%@, %@", movieRating!, minutesToRuntimeString(movieRuntime!))
+        cell.ratingLabel.text = String(format: "%@, %@", movieRating!, MoviesUtils.minutesToRuntimeString(movieRuntime!))
         
         return cell
     }

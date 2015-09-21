@@ -21,6 +21,7 @@ class MovieDetailsViewController: UIViewController, UIScrollViewDelegate {
         let movieTitle = self.movie!["title"] as? String
         let movieYear = self.movie!["year"] as? Int
         let movieRating = self.movie!["mpaa_rating"] as? String
+        let movieRuntime = self.movie!["runtime"] as? Int
         let movieCriticsScore = self.movie!.valueForKeyPath("ratings.critics_score") as? Int
         let movieAudienceScore = self.movie!.valueForKeyPath("ratings.audience_score") as? Int
         let movieSynopsis = self.movie!["synopsis"] as? String
@@ -35,32 +36,35 @@ class MovieDetailsViewController: UIViewController, UIScrollViewDelegate {
         let url = NSURL(string: urlString)
         self.posterImageView .setImageWithURL(url!)
         
-        let offset = 350 as CGFloat
+        let offset = 300 as CGFloat
         let contentView = UIView(frame: CGRectMake(0, offset, self.view.frame.size.width, self.view.frame.size.height - self.navigationController!.navigationBar.frame.size.height))
         contentView.backgroundColor = UIColor.whiteColor()
         contentView.alpha = 0.85;
         self.scrollView.addSubview(contentView)
         
-        let scrollHeight = offset + contentView.frame.size.height - 16
+        let scrollHeight = offset + contentView.frame.size.height - 16 - 49
         self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, scrollHeight)
         
-        let titleLabel = UILabel(frame: CGRectMake(8, 8, self.view.frame.size.width - 16, 28))
-        titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 24)
+        let titleLabel = UILabel(frame: CGRectMake(8, 8, self.view.frame.size.width - 16, 20))
+        titleLabel.font = UIFont(name: "AvenirNext-Bold", size: 20)
         titleLabel.text = String(format: "%@ (%d)", movieTitle!, movieYear!)
         titleLabel.sizeToFit()
         contentView.addSubview(titleLabel)
         
-        let scoreLabel = UILabel(frame: CGRectMake(8, titleLabel.frame.maxY+4, self.view.frame.size.width - 16, 28))
+        let scoreLabel = UILabel(frame: CGRectMake(8, titleLabel.frame.maxY, self.view.frame.size.width - 16, 28))
+        scoreLabel.font = UIFont(name: "AvenirNext-Regular", size: 15)
         scoreLabel.text = String(format: "Critics Score: %d%%, Audience Score: %d%%", movieCriticsScore!, movieAudienceScore!)
         scoreLabel.sizeToFit()
         contentView.addSubview(scoreLabel)
         
         let ratingLabel = UILabel(frame: CGRectMake(8, scoreLabel.frame.maxY+4, self.view.frame.size.width - 16, 28))
-        ratingLabel.text = String(format: "Rated %@", movieRating!)
+        ratingLabel.text = String(format: "%@, %@", movieRating!, MoviesUtils.minutesToRuntimeString(movieRuntime!))
+        ratingLabel.font = UIFont(name: "AvenirNext-Regular", size: 15)
         ratingLabel.sizeToFit()
         contentView.addSubview(ratingLabel)
         
         let synopsisLabel = UILabel(frame: CGRectMake(8, ratingLabel.frame.maxY+4, self.view.frame.size.width - 16, self.view.frame.size.height - titleLabel.frame.size.height - scoreLabel.frame.size.height - ratingLabel.frame.size.height))
+        synopsisLabel.font = UIFont(name: "AvenirNext-Regular", size: 15)
         synopsisLabel.text = movieSynopsis
         synopsisLabel.numberOfLines = 0 as Int
         synopsisLabel.sizeToFit()
