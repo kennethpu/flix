@@ -10,9 +10,7 @@ Time spent: 12 hours
 - [x] User can view a list of movies. Poster images load asynchronously.
 - [x] User can view movie details by tapping on a cell.
 - [x] User sees loading state while waiting for the API.
-- [x] User sees error message when there is a network error:
-
-<a href="url"><img src="./res/network_error.png" width="320" ></a>
+- [x] User sees error message when there is a network error:[demo](https://raw.githubusercontent.com/kennethpu/flix/master/res/network_error.png)
 - [x] User can pull to refresh the movie list.
 
 #### Optional
